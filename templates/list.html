@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库列表</title>
+
+
+    <style type="text/css">
+table{
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+</style>
+        <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js">
+</script>
+</head>
+<body>
+<h2><a href="./api">api文档</a></h2>
+<h2>数据库列表</h2><button id="adds">添加</button>
+<div id="tb"></div>
+</body>
+</html>
+<script>
+
+var url="http://172.16.38.21:8201"
+var token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU1Njk0NjksImlhdCI6MTYyNTQ4MzA2OX0.52Dfs2VLvMImoQF2N96TiMcBP5VAnQO3DWfRiVLuoDE"
+
+
+var  psc=prompt("输入密码：", "")
+if(psc){
+
+    $.get(url + "/logins",
+            {
+                "passwd": psc
+
+            },
+            function (data, status) {
+     if(data["code"]==1){
+
+          alert("验证通过");
+     }else{
+
+          alert("验证不通过");
+          $("body").html("无权访问")
+     }
+
+            });
+}else{
+
+     $("body").html("无权访问")
+
+
+}
+
+$.post(url+"/get_table",
+  {
+     "table":"sql_token",
+    "token":token,
+        "limit":10,
+      "page":1
+  },
+  function(data,status){
+    ds = data["data"]
+      html="<table><th>连接地址</th><th>端口</th><th>库名</th><th>识别码</th><th>操作</th>"
+      for (var i in ds){
+          html+="<tr><td>"+ds[i]["host"]+"</td><td>"+ds[i]["port"]+"</td><td>"+ds[i]["host_db"]+"</td><td>"+ds[i]["token"]+"</td><td><button onclick='jinyong("+ds[i]["id"]+")'>禁用</button>&nbsp;&nbsp;&nbsp;<button onclick='qiyong("+ds[i]["id"]+")'>启用</button>&nbsp;&nbsp;&nbsp;<button onclick='uptoken("+ds[i]["id"]+")'>更新token</button>&nbsp;&nbsp;&nbsp;<button onclick=uphost('"+ds[i]["id"]+"','"+ds[i]["host"]+"','"+ds[i]["host_user"]+"','"+ds[i]["host_passwd"]+"','"+ds[i]["port"]+"','"+ds[i]["host_db"]+"')>修改</button></td></tr>"
+
+
+      }
+       html+="</table>"
+      console.log(html)
+      $("#tb").html(html)
+  });
+function jinyong(ids){
+
+    $.post(url+"/up_table",
+  {
+   "table":"sql_token",
+"token":token,
+      "name_list":"['types']",
+"value_list":"[2]",
+"up_name":"id",
+"up_value":ids
+  },
+  function(data,status){
+    alert(data["msg"]);
+  });
+
+
+}
+function qiyong(ids){
+
+    $.post(url+"/up_table",
+  {
+   "table":"sql_token",
+"token":token,
+      "name_list":"['types']",
+"value_list":"[1]",
+"up_name":"id",
+"up_value":ids
+  },
+  function(data,status){
+    alert(data["msg"]);
+  });
+
+
+}
+function uphost(ids,hosts,users,passwd,ports,host_dbs){
+
+  var  host=prompt("输入host", hosts)
+    var user = prompt("输入user", users)
+   var passwd= prompt("输入passwd", passwd)
+  var port =  prompt("输入port", ports)
+   var host_db=prompt("输入host_db", host_dbs)
+    if(host && user && passwd && port && host_db) {
+        $.post(url + "/up_table",
+            {
+                "table": "sql_token",
+                "token": token,
+                "name_list": "['host','port','host_user','host_passwd','host_db']",
+                "value_list": "['"+host+"','"+port+"','"+user+"','"+passwd+"','"+host_db+"']",
+                "up_name": "id",
+                "up_value": ids
+            },
+            function (data, status) {
+                alert(data["msg"]);
+            });
+
+    }
+}
+
+function uptoken(ids){
+ var tokens = JSON.parse($.ajax({
+            url: url+"/get_jwts"
+         ,async: false
+        ,type:'get'}).responseText)["token"];
+    $.post(url+"/up_table",
+  {
+   "table":"sql_token",
+"token":token,
+      "name_list":"['token']",
+"value_list":"['"+tokens+"']",
+"up_name":"id",
+"up_value":ids
+  },
+  function(data,status){
+    alert(data["msg"]);
+  });
+
+
+}
+$("#adds").click(function(){
+
+   var  host=prompt("输入host", "")
+    var user = prompt("输入user", "")
+   var passwd= prompt("输入passwd", "")
+  var port =  prompt("输入port", "")
+   var host_db=prompt("输入host_db", "")
+    if(host && user && passwd && port && host_db){
+
+ var tokens = JSON.parse($.ajax({
+            url: url+"/get_jwts"
+         ,async: false
+        ,type:'get'}).responseText)["token"];
+        $.post(url+"/add_table",
+  {
+   "table":"sql_token",
+"token":token,
+      "name_list":"['host','port','host_user','host_passwd','host_db','token']",
+"value_list":"['"+host+"','"+port+"','"+user+"','"+passwd+"','"+host_db+"','"+tokens+"']"
+  },
+  function(data,status){
+    alert(data["msg"]);
+  });
+
+    }
+
+})
+
+</script>

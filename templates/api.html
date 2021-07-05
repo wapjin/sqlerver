@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>api文档</title>
+</head>
+<body>
+访问地址：<span id="demo"></span>
+<h2>添加数据</h2>
+<p>
+    路径：<br>
+    /add_table<br>
+    POST<br>
+    参数<br>
+    table = 数据表名（sql_token）<br>
+    <br>token  = 识别码（eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA）
+   <br> name_list=list的字符串字段名（["user"]）
+    <br>value_list=list的字符串字段名（["root"]）
+    <br>示例
+    <br> /add_table
+    <br>{
+   <br> "table":"sql_token",
+    <br>"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA",
+   <br> "name_list":"['token']",
+   <br> "value_list":"[66]"
+   <br> }
+
+</p>
+
+<h2>修改数据</h2>
+<p>
+   <br> 路径：
+   <br> /up_table
+   <br> POST
+  <br>  参数
+   <br> table = 数据表名（sql_token）
+  <br>  token  = 识别码（eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA）
+    <br>name_list=list的字符串字段名（["user"]）
+  <br>  value_list=list的字符串字段名（["root"]）
+  <br>  up_name=被索引修改的字段的名称
+   <br> up_value=被索引修改的字段的值
+  <br>  示例
+  <br>   /up_table
+
+   <br>{
+   <br> "table":"sql_token",
+    <br>"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA",
+   <br>  "name_list":"['user','passwd']",
+    <br> "value_list":"[667,678]",
+   <br>"up_name":"id",
+   <br>"up_value":2
+   <br> }
+
+
+</p>
+<h2>查看数据</h2>
+<p>
+   <br> 路径：
+   <br> /get_table
+  <br>  POST
+  <br>  参数
+ <br>   table = 数据表名（sql_token）
+  <br>  token  = 识别码（eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA）
+  <br>  limit= 个数
+  <br>  page= 页数
+
+   <br> 示例
+   <br>  /get_table
+     <br>{
+   <br> "table":"sql_token",
+    <br>"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA",
+   <br> "limit":10,
+   <br> "page":1,
+   <br> }
+
+
+</p>
+<h2>条件查看数据</h2>
+<p>
+   <br> 路径：
+   <br> /get_tables
+  <br>  POST
+  <br>  参数
+ <br>   table = 数据表名（sql_token）
+  <br>  token  = 识别码（eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA）
+  <br>  limit= 个数
+  <br>  page= 页数
+<br>  where= id='1'
+   <br> 示例
+   <br>  /get_tables
+        <br>{
+   <br> "table":"sql_token",
+    <br>"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjU0MTI4NDMsImlhdCI6MTYyNTMyNjQ0M30.cF0knkos36HfmFfBMBEwp05P9HXrwqZ-vZZJR8Q2YDA",
+   <br> "limit":10,
+   <br> "page":1,
+    <br> "where":"id='1'",
+   <br> }
+
+</p>
+</body>
+</html>
+<script>
+
+x=document.getElementById("demo");  // 找到元素
+x.innerHTML=  window.location.host;    // 改变内容
+
+
+</script>
